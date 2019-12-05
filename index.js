@@ -38,7 +38,7 @@ ReceiverVolume.prototype.getStatus = function(callback) {
         } else {
             callback(parseInt(stdout.trim()));
         }
-    }).bind(this);
+    });
 }
 
 ReceiverVolume.prototype.setVolume = function(value, callback) {
@@ -50,7 +50,7 @@ ReceiverVolume.prototype.setVolume = function(value, callback) {
                 this.currentVolume = value;
                 callback(null);
             }
-        }).bind(this);
+        });
     } else {
         callback(null);
     }
