@@ -47,10 +47,10 @@ ReceiverVolume.prototype.setVolume = function(value, callback) {
             if (stderr) {
                 callback(error);
             } else {
-                this.currentVolume = value;
                 callback(null);
             }
         });
+        this.currentVolume = value;
     } else {
         callback(null);
     }
