@@ -47,10 +47,10 @@ ReceiverVolume.prototype.setVolume = function(value, callback) {
             if (stderr) {
                 callback(error);
             } else {
+                this.currentVolume = value;
                 callback(null);
             }
         });
-        this.currentVolume = value;
     } else {
         callback(null);
     }
@@ -90,17 +90,18 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
         this.log('Power Off');
         // this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' +this.volumeBeforeMute);
         // this.volumeBeforeMute = this.currentVolume;
-        this.setVolume(0, callback);
+        // this.setVolume(0, callback);
     }
+    callback(null);
 }
 
 ReceiverVolume.prototype.getServices = function() {
     var lightbulbService = this.useFan ? new Service.Fan(this.name) : new Service.Lightbulb(this.name);
 
-    // lightbulbService
-    //     .getCharacteristic(Characteristic.On)
-    //     .on('get', this.getPowerOn.bind(this))
-    //     .on('set', this.setPowerOn.bind(this));
+    lightbulbService
+        .getCharacteristic(Characteristic.On)
+        .on('get', this.getPowerOn.bind(this))
+        .on('set', this.setPowerOn.bind(this));
     if (this.useFan) {
         lightbulbService
             .addCharacteristic(new Characteristic.RotationSpeed())
