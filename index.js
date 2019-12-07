@@ -19,7 +19,7 @@ function ReceiverVolume(log, config) {
     this.maxVolume = config['maxVolume'] || 15;
     this.host = config['host'];
     this.useFan = !!config['useFan']; // default to false, and make sure its a bool
-    this.volumeBeforeMute = 20;
+    this.volumeBeforeMute = 3;
     if (!this.host) {
         this.log.warn('Config is missing host/IP of receiver');
         callback(new Error('No host/IP defined.'));
@@ -90,7 +90,7 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
         this.log('Power Off');
         this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' +this.volumeBeforeMute);
         this.volumeBeforeMute = this.currentVolume;
-        this.setBrightness(0, callback);
+        this.setVolume(this.volumeBeforeMute, callback);
     }
 }
 
