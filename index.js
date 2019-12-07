@@ -19,7 +19,7 @@ function ReceiverVolume(log, config) {
     this.maxVolume = config['maxVolume'] || 15;
     this.host = config['host'];
     this.useFan = !!config['useFan']; // default to false, and make sure its a bool
-
+    this.volumeBeforeMute = 20;
     if (!this.host) {
         this.log.warn('Config is missing host/IP of receiver');
         callback(new Error('No host/IP defined.'));
@@ -75,13 +75,29 @@ ReceiverVolume.prototype.getBrightness = function(callback) {
     }.bind(this));
 };
 
+ReceiverVolume.prototype.getPowerOn = function(callback) {
+    this.getStatus(function(status) {
+        var powerState = status ? 1 : 0;
+        callback(null, powerState);
+    }.bind(this));
+}
+
+ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
+    if(powerOn){
+        this.setBrightness(this.volumeBeforeMute, callback);
+    } else {
+        this.volumeBeforeMute = this.currentVolume;
+        this.setBrightness(0, callback);
+    }
+}
+
 ReceiverVolume.prototype.getServices = function() {
     var lightbulbService = this.useFan ? new Service.Fan(this.name) : new Service.Lightbulb(this.name);
 
-    // lightbulbService
-    //     .getCharacteristic(Characteristic.On)
-    //     .on('get', this.getPowerOn.bind(this))
-    //     .on('set', this.setPowerOn.bind(this));
+    lightbulbService
+        .getCharacteristic(Characteristic.On)
+        .on('get', this.getPowerOn.bind(this))
+        .on('set', this.setPowerOn.bind(this));
     if (this.useFan) {
         lightbulbService
             .addCharacteristic(new Characteristic.RotationSpeed())
