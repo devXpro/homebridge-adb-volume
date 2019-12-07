@@ -97,10 +97,10 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
 ReceiverVolume.prototype.getServices = function() {
     var lightbulbService = this.useFan ? new Service.Fan(this.name) : new Service.Lightbulb(this.name);
 
-    lightbulbService
-        .getCharacteristic(Characteristic.On)
-        .on('get', this.getPowerOn.bind(this))
-        .on('set', this.setPowerOn.bind(this));
+    // lightbulbService
+    //     .getCharacteristic(Characteristic.On)
+    //     .on('get', this.getPowerOn.bind(this))
+    //     .on('set', this.setPowerOn.bind(this));
     if (this.useFan) {
         lightbulbService
             .addCharacteristic(new Characteristic.RotationSpeed())
