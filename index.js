@@ -86,18 +86,17 @@ ReceiverVolume.prototype.getPowerOn = function(callback) {
 }
 
 ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
-    if(powerOn){
+    if (powerOn) {
         this.log('Power On');
-        // this.setBrightness(this.volumeBeforeMute, callback);
+        this.setVolume(this.volumeBeforeMute, callback);
         callback(null);
-
     } else {
         this.log('Power Off');
-        // this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' +this.volumeBeforeMute);
-        // this.volumeBeforeMute = this.currentVolume;
+        this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' + this.volumeBeforeMute);
+        this.volumeBeforeMute = this.currentVolume;
         this.setVolume(0, callback);
     }
-}
+};
 
 ReceiverVolume.prototype.getServices = function() {
     var lightbulbService = this.useFan ? new Service.Fan(this.name) : new Service.Lightbulb(this.name);
