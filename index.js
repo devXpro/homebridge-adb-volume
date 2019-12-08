@@ -42,6 +42,7 @@ ReceiverVolume.prototype.getStatus = function(callback) {
 }
 
 ReceiverVolume.prototype.setVolume = function(value, callback) {
+    this.log('Current = '+ this.currentVolume + 'Setted = ' + value);
     if (value !== this.currentVolume) {
         exec('adb shell service call audio 7 i32 3 i32 ' + value + ' i32 1', function(error, stdout, stderr) {
             if (stderr) {
@@ -92,7 +93,7 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
         this.log('Power Off');
         // this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' +this.volumeBeforeMute);
         // this.volumeBeforeMute = this.currentVolume;
-        this.setVolume(0, callback).bind(this);
+        this.setVolume(0, callback);
     }
 }
 
