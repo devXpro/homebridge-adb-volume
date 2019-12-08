@@ -140,10 +140,16 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
             }
         } else {
             switchService.getCharacteristic(Characteristic.On).setValue(false, undefined, funcContext);
+            if (callback) {
+                callback();
+            }
         }
     }.bind(this));
-    callback(null);
+    if (callback) {
+        callback();
+    }
 }
+
 
 ADBController.prototype.androidPower = function(powerOn, callback) {
     var command = 'adb shell dumpsys power | grep \'mHoldingDisplaySuspendBlocker\'';
@@ -153,6 +159,9 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
             exec('adb shell input keyevent 26', puts);
         }
     });
+    if (callback) {
+        callback();
+    }
 }
 
 ADBController.prototype.getServices = function() {
@@ -177,15 +186,17 @@ ADBController.prototype.getServices = function() {
     if (this.starters) {
         this.starters.forEach(function(starter) {
             var switchService = new Service.Switch(starter.name, starter.name);
+            var boundSetPowerState = this.setPowerState.bind(this, switchService);
             switchService
                 .getCharacteristic(Characteristic.On)
-                .on('set', this.setPowerState.bind(this, switchService));
+                .on('set', boundSetPowerState);
 
             this.services.push(switchService);
         }.bind(this));
     }
     return this.services;
 }
+
 
 
 
