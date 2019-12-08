@@ -128,16 +128,13 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
 
         if (targetService.subtype === switchService.subtype) {
             if(powerState){
-                this.androidPower(true, callback);
                 var starterIndex = this.volumeDisable ? idx : idx - 1;
                 if (this.starters[starterIndex]['command']) {
                     var commands = this.starters[starterIndex]['command'].split(' ');
-                    commands.forEach(function(keycode){
-                        execSync('adb shell input keyevent ' + keycode);
-                    });
+                    this.runCommands(true, commands);
                 }
             } else{
-                this.androidPower(false, callback);
+                this.runCommands(false, false);
             }
         } else {
             switchService.getCharacteristic(Characteristic.On).setValue(false, undefined, funcContext);
@@ -146,12 +143,17 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
     callback();
 }
 
-ADBController.prototype.androidPower = function(powerOn, callback) {
-    var command = 'adb shell dumpsys power | grep \'mHoldingDisplaySuspendBlocker\'';
-    exec(command, function(error, stdout, stderr) {
+ADBController.prototype.runCommands = function(powerOn, commands) {
+    var stateCommand = 'adb shell dumpsys power | grep \'mHoldingDisplaySuspendBlocker\'';
+    exec(stateCommand, function(error, stdout, stderr) {
         var searchElement = powerOn ? 'false' : 'true';
         if (stdout.indexOf(searchElement) !== -1) {
-            exec('adb shell input keyevent 26', puts);
+            execSync('adb shell input keyevent 26', puts);
+        }
+        if (commands) {
+            commands.forEach(function(keycode) {
+                execSync('adb shell input keyevent ' + keycode);
+            });
         }
     });
 }
