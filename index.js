@@ -162,8 +162,6 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
                         callback(null);
                     }
                 }.bind(this));
-            } else{
-                callback(null);
             }
         }
     });
