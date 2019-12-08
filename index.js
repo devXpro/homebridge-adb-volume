@@ -133,7 +133,6 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
                     commands.forEach(function(keycode){
                         exec('adb shell input keyevent ' + keycode, function(error, stdout, stderr) {
                             callback(null);
-                            return;
                         });
                     });
                 }
@@ -142,9 +141,9 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
             }
         } else {
             switchService.getCharacteristic(Characteristic.On).setValue(false, undefined, funcContext);
+            callback(null);
         }
     }.bind(this));
-    callback(null);
 }
 
 ADBController.prototype.androidPower = function(powerOn, callback) {
