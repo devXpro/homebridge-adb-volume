@@ -156,12 +156,11 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
             if(stdout.indexOf(searchElement) !== -1){
                 exec('adb shell input keyevent 26', function(error, stdout, stderr) {
                     if (stderr) {
-                        this.log('Error = ' + stderr);
                         callback(error);
                     } else {
                         callback(null);
                     }
-                }.bind(this));
+                });
             }
         }
     });
