@@ -140,11 +140,11 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
                 this.androidPower(false, callback);
             }
         } else {
-            switchService.getCharacteristic(Characteristic.On).setValue(false, callback, funcContext);
+            switchService.getCharacteristic(Characteristic.On).setValue(false, undefined, funcContext);
         }
     }.bind(this));
+    callback();
 }
-
 
 ADBController.prototype.androidPower = function(powerOn, callback) {
     var command = 'adb shell dumpsys power | grep \'mHoldingDisplaySuspendBlocker\'';
