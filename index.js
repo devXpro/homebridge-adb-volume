@@ -133,6 +133,7 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
                     commands.forEach(function(keycode){
                         exec('adb shell input keyevent ' + keycode, function(error, stdout, stderr) {
                             callback(null);
+                            return;
                         });
                     });
                 }
