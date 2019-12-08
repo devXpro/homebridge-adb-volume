@@ -113,6 +113,7 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
 
     // Callback safety
     if (context == funcContext) {
+        this.log('Shit... Callback call....')
         if (callback) {
             callback();
         }
@@ -140,14 +141,9 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
             }
         } else {
             switchService.getCharacteristic(Characteristic.On).setValue(false, undefined, funcContext);
-            if (callback) {
-                callback();
-            }
+            callback();
         }
     }.bind(this));
-    if (callback) {
-        callback();
-    }
 }
 
 
@@ -159,9 +155,6 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
             exec('adb shell input keyevent 26', puts);
         }
     });
-    if (callback) {
-        callback();
-    }
 }
 
 ADBController.prototype.getServices = function() {
