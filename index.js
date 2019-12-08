@@ -86,13 +86,14 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
     if(powerOn){
         this.log('Power On');
         // this.setBrightness(this.volumeBeforeMute, callback);
+        callback(null);
+
     } else {
         this.log('Power Off');
         // this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' +this.volumeBeforeMute);
         // this.volumeBeforeMute = this.currentVolume;
-        // this.setVolume(0, callback);
+        this.setVolume(0, callback);
     }
-    callback(null);
 }
 
 ReceiverVolume.prototype.getServices = function() {
