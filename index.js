@@ -16,6 +16,7 @@ function ADBController(log, config) {
     this.log = log;
     this.currentVolume = 0;
     this.muted = false;
+    this.name = config.name || 'ADBController';
     this.volumeDisable = config['volumeDisable'] || false;
     this.volumeName = config['volumeName'] || "Receiver Volume";
     this.maxVolume = config['maxVolume'] || 15;
