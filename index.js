@@ -126,8 +126,9 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
         if (targetService.subtype === switchService.subtype) {
             if(powerState){
                 this.androidPower(true, callback);
-                if (this.starters[idx]['command']) {
-                    var commands = this.starters[idx]['command'].split(' ');
+                var starterIndex = this.volumeDisable ? idx : idx - 1;
+                if (this.starters[starterIndex]['command']) {
+                    var commands = this.starters[starterIndex]['command'].split(' ');
                     commands.forEach(function(keycode){
                         exec('adb shell input keyevent ' + keycode, function(error, stdout, stderr) {
                             callback(null);
@@ -171,7 +172,7 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
 ADBController.prototype.getServices = function() {
    this.services = [];
    if(!this.volumeDisable) {
-       var lightbulbService = this.useFan ? new Service.Fan(this.name) : new Service.Lightbulb(this.name);
+       var lightbulbService = this.useFan ? new Service.Fan(this.volumeName) : new Service.Lightbulb(this.volumeName);
 
        lightbulbService.getCharacteristic(Characteristic.On).
            on('get', this.getPowerOn.bind(this)).
@@ -199,6 +200,7 @@ ADBController.prototype.getServices = function() {
     }
     return this.services;
 }
+
 
 
 
