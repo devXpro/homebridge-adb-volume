@@ -43,14 +43,14 @@ ReceiverVolume.prototype.getStatus = function(callback) {
 }
 
 ReceiverVolume.prototype.setVolume = function(value, callback) {
-    this.log('Current = '+ this.currentVolume + 'Setted = ' + value);
+    this.log('Current = '+ this.currentVolume + ' Setted = ' + value);
     if (value !== this.currentVolume) {
         exec('adb shell service call audio 7 i32 3 i32 ' + value + ' i32 1', function(error, stdout, stderr) {
             if (stderr) {
                 this.log('Error = ' + stderr);
                 callback(error);
             } else {
-                this.log('non Error');
+                this.log('Volume was changed on android...');
                 this.currentVolume = value;
                 callback(null);
             }
@@ -90,8 +90,8 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
     if (powerOn) {
         if (this.muted) {
             this.log('Power On');
-            this.setVolume(this.volumeBeforeMute, callback);
             this.muted = false;
+            this.setVolume(this.volumeBeforeMute, callback);
         }
     } else {
         this.log('Power Off');
@@ -105,10 +105,10 @@ ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
 ReceiverVolume.prototype.getServices = function() {
     var lightbulbService = this.useFan ? new Service.Fan(this.name) : new Service.Lightbulb(this.name);
 
-    // lightbulbService
-    //     .getCharacteristic(Characteristic.On)
-    //     .on('get', this.getPowerOn.bind(this))
-    //     .on('set', this.setPowerOn.bind(this));
+    lightbulbService
+        .getCharacteristic(Characteristic.On)
+        .on('get', this.getPowerOn.bind(this))
+        .on('set', this.setPowerOn.bind(this));
     if (this.useFan) {
         lightbulbService
             .addCharacteristic(new Characteristic.RotationSpeed())
