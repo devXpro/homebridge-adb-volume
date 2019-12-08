@@ -154,7 +154,6 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
             exec('adb shell input keyevent 26', puts);
         }
     });
-    callback(null);
 }
 
 ADBController.prototype.getServices = function() {
