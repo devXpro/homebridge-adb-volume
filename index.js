@@ -147,25 +147,15 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
 }
 
 ADBController.prototype.androidPower = function(powerOn, callback) {
-    var command = "adb shell dumpsys power | grep 'mHoldingDisplaySuspendBlocker'";
+    var command = 'adb shell dumpsys power | grep \'mHoldingDisplaySuspendBlocker\'';
     exec(command, function(error, stdout, stderr) {
-        if (stderr) {
-            callback(null);
-        } else {
-            var searchElement = powerOn ? "false" : "true";
-            if(stdout.indexOf(searchElement) !== -1){
-                exec('adb shell input keyevent 26', function(error, stdout, stderr) {
-                    if (stderr) {
-                        this.log('Error = ' + stderr);
-                        callback(error);
-                    } else {
-                        callback(null);
-                    }
-                }.bind(this));
-            }
+        var searchElement = powerOn ? 'false' : 'true';
+        if (stdout.indexOf(searchElement) !== -1) {
+            exec('adb shell input keyevent 26', puts);
         }
-    }.bind(this));
-};
+    });
+    callback(null);
+}
 
 ADBController.prototype.getServices = function() {
    this.services = [];
