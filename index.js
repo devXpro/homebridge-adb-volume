@@ -87,10 +87,12 @@ ReceiverVolume.prototype.getPowerOn = function(callback) {
 }
 
 ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
-    if (powerOn && this.muted) {
-        this.log('Power On');
-        this.setVolume(this.volumeBeforeMute, callback);
-        this.muted = false;
+    if (powerOn) {
+        if (this.muted) {
+            this.log('Power On');
+            this.setVolume(this.volumeBeforeMute, callback);
+            this.muted = false;
+        }
     } else {
         this.log('Power Off');
         this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' + this.volumeBeforeMute);
