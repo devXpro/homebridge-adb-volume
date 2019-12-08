@@ -1,5 +1,6 @@
 var Service, Characteristic;
     exec = require('child_process').exec;
+    execSync = require('child_process').execSync;
 
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
@@ -131,9 +132,7 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
                 if (this.starters[starterIndex]['command']) {
                     var commands = this.starters[starterIndex]['command'].split(' ');
                     commands.forEach(function(keycode){
-                        exec('adb shell input keyevent ' + keycode, function(error, stdout, stderr) {
-                            callback(null);
-                        });
+                        execSync('adb shell input keyevent ' + keycode);
                     });
                 }
             } else{
