@@ -46,8 +46,10 @@ ReceiverVolume.prototype.setVolume = function(value, callback) {
     if (value !== this.currentVolume) {
         exec('adb shell service call audio 7 i32 3 i32 ' + value + ' i32 1', function(error, stdout, stderr) {
             if (stderr) {
+                this.log('Error = ' + stderr);
                 callback(error);
             } else {
+                this.log('non Error');
                 this.currentVolume = value;
                 callback(null);
             }
