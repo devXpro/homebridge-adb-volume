@@ -137,6 +137,7 @@ ADBController.prototype.setPowerState = function(targetService, powerState, call
                 }
             } else{
                 this.androidPower(false, callback);
+                callback(null);
             }
         } else {
             switchService.getCharacteristic(Characteristic.On).setValue(false, undefined, funcContext);
