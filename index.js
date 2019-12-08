@@ -160,10 +160,10 @@ ADBController.prototype.androidPower = function(powerOn, callback) {
                     } else {
                         callback(null);
                     }
-                });
+                }.bind(callback));
             }
         }
-    });
+    }.bind(callback));
 };
 
 ADBController.prototype.getServices = function() {
