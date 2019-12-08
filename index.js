@@ -15,6 +15,7 @@ function puts(error, stdout, stderr) {
 function ReceiverVolume(log, config) {
     this.log = log;
     this.currentVolume = 0;
+    this.muted = false;
     this.name = config['name'] || "Receiver Volume";
     this.maxVolume = config['maxVolume'] || 15;
     this.host = config['host'];
@@ -86,13 +87,15 @@ ReceiverVolume.prototype.getPowerOn = function(callback) {
 }
 
 ReceiverVolume.prototype.setPowerOn = function(powerOn, callback) {
-    if (powerOn) {
+    if (powerOn && this.muted) {
         this.log('Power On');
         this.setVolume(this.volumeBeforeMute, callback);
+        this.muted = false;
     } else {
         this.log('Power Off');
         this.log('Current volume: ' + this.currentVolume + ' Volume before Mute: ' + this.volumeBeforeMute);
         this.volumeBeforeMute = this.currentVolume;
+        this.muted = true;
         this.setVolume(0, callback);
     }
 };
